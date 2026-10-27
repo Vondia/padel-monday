@@ -1,43 +1,47 @@
-🎾 Padel Monday League
-A custom-built Next.js web application for our 5-person padel group. This app automates our weekly Monday match scheduling, tracks our ongoing leaderboard, and definitively proves who is the best (and who owes the next round of drinks).
+# Padel Monday League
 
-🏆 The Squad
-Olivier, Karel, Sander, Klaas, and Pim. (Guest players supported upon request!)
+A Next.js app for a five-player padel group. It plans the Monday matches, keeps the leaderboard, and shows who is buying the next round.
 
-✨ Key Features
-Smart Match Scheduler: Automatically generates balanced 2v2 teams for upcoming Mondays and clearly highlights which of the 5 players has the "Resting Week".
+## The squad
 
-Dynamic Leaderboard: Ranks players based on a custom best-of-3 set scoring system.
+Olivier, Karel, Sander, Klaas, and Pim. Guests can fill in, and they do not earn points.
 
-The Penalty Box & Glory: Highlights the player on a winning streak (🔥 On Fire) and shames the "Loser of the Month" who has to buy the first round of drinks.
+## Features
 
-Match History: A historical log of all past clashes and set scores.
+- **Match schedule.** Balanced 2v2 lineups for the Monday nights, with the resting player called out. Lineups can be edited, and extra dates can be added.
+- **Leaderboard.** Players ranked by points from best-of-three sets.
+- **Penalty box.** Last month's biggest loser carries into the new month. This month's biggest loser is on the hot seat. Two wins in a row light the flame.
+- **Podium.** The all-time top three, with a link through to the full rankings.
+- **Match history.** Every saved score, plus weeks that were skipped.
+- **Admin.** A PIN-protected area to save a result, skip a week, change a lineup, add a match, or remove a result so the points come back off the board.
 
-Admin Dashboard: A protected area to submit weekly match results (which automatically updates the leaderboard points), manually override schedules for last-minute cancellations, and add temporary guest players.
+## Scoring
 
-📊 Scoring System
-Points are awarded based on the outcome of a Best-of-3 match:
+| Score | Result | Points |
+| --- | --- | --- |
+| 2–0 | Win | 3 |
+| 2–1 | Win | 2 |
+| 1–2 | Loss | 1 |
+| 0–2 | Loss | 0 |
 
-3 Points: Win (2-0)
+## Tech stack
 
-2 Points: Win (2-1)
+- **Frontend:** Next.js, React, Tailwind CSS, Lucide
+- **Database:** Neon (Postgres)
+- **Deployment:** Vercel
 
-1 Point: Loss (1-2)
+## Local development
 
-0 Points: Loss (0-2)
+1. Clone the repository.
+2. Install dependencies:
 
-🛠 Tech Stack
-Frontend: Next.js, React, Tailwind CSS, Lucide Icons
+   ```bash
+   npm install
+   ```
 
-Database: Neon (PostgreSQL)
+3. Add the Neon connection string and `ADMIN_PINCODE` to `.env`.
+4. Start the app:
 
-Deployment: Vercel
-
-🚀 Local Development
-Clone the repository.
-
-Run npm install to install dependencies.
-
-Set up a Neon Postgres database and add your connection string to a .env file.
-
-Run neon run -- npm run dev to start the development server.
+   ```bash
+   npm run dev
+   ```
