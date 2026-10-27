@@ -38,7 +38,7 @@ function NameWithStreak({ name, streak }: { name: string; streak: number }) {
 function Avatar({ name }: { name: string }) {
   const player = styleFor(name)
   return (
-    <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${player.color} text-xs font-black text-slate-950`}>
+    <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br ${player.color} text-xs font-black text-slate-950`}>
       {player.initials}
     </span>
   )
@@ -61,7 +61,7 @@ function Header({ active, setActive }: { active: string; setActive: (value: stri
           </div>
         </div>
       </header>
-      <nav className="mb-8 hidden gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1 sm:flex">
+      <nav className="mb-8 hidden gap-1 rounded-2xl border border-white/10 bg-white/3 p-1 sm:flex">
         {items.map(({ id, label, icon: Icon }) => (
           <button key={id} onClick={() => setActive(id)} className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition ${active === id ? "bg-lime-300 text-slate-950" : "text-slate-400 hover:text-white"}`}>
             <Icon className="size-4" />{label}
@@ -122,7 +122,7 @@ function CalendarModal({ fixtures, onClose }: { fixtures: Fixture[]; onClose: ()
       <p className="mb-6 text-sm text-slate-400">Plan ahead with every Monday matchup and resting week.</p>
       <div className="grid gap-3 sm:grid-cols-2">
         {fixtures.map((match) => (
-          <div key={match.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <div key={match.id} className="rounded-2xl border border-white/10 bg-white/3 p-4">
             <p className="mb-3 font-black text-white">{match.date}</p>
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-xl bg-lime-300/10 p-3">
@@ -200,7 +200,7 @@ function HomeView({ goRankings, players, matches, fixtures }: { goRankings: () =
           )}
         </div>
       </section>
-      <section className="glass-card rounded-3xl border border-orange-300/10 bg-orange-300/[0.04] p-5 sm:p-6">
+      <section className="glass-card rounded-3xl border border-orange-300/10 bg-orange-300/4 p-5 sm:p-6">
         <p className="text-[10px] font-black uppercase tracking-widest text-orange-300">Penalty box · {penalty.currentMonthLabel}</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div className="rounded-2xl border border-orange-300/20 bg-orange-300/10 p-4">
@@ -217,7 +217,7 @@ function HomeView({ goRankings, players, matches, fixtures }: { goRankings: () =
               </>
             )}
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
             <p className="text-[10px] font-black uppercase tracking-widest text-lime-300">On the hot seat</p>
             {penalty.losers.length > 0 ? (
               <>
@@ -692,7 +692,7 @@ function AdminView({ players, fixtures, matches }: { players: PlayerStanding[]; 
         ) : (
           <div className="mt-6 flex flex-col gap-3">
             {matches.map((result) => (
-              <div key={result.id} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div key={result.id} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/3 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm font-bold text-white">{resultSummary(result)}</p>
                 {confirmId === result.id ? (
                   <div className="flex shrink-0 gap-2">
