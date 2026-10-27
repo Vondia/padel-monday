@@ -1,7 +1,8 @@
 import { readdirSync, readFileSync } from "node:fs"
 import { Pool } from "pg"
+import { withVerifyFullSsl } from "../lib/pg-ssl.mjs"
 
-const connectionString = process.env.DATABASE_URL_UNPOOLED
+const connectionString = withVerifyFullSsl(process.env.DATABASE_URL_UNPOOLED ?? "")
 if (!connectionString) {
   console.error("DATABASE_URL_UNPOOLED is not set. Run with node --env-file=.env.local")
   process.exit(1)

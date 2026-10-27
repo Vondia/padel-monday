@@ -2,6 +2,7 @@ import { attachDatabasePool } from "@vercel/functions"
 import { parseEnv } from "@neon/env"
 import { Pool } from "pg"
 import config from "../neon"
+import { withVerifyFullSsl } from "./pg-ssl.mjs"
 
 const { postgres } = parseEnv(config, ["DATABASE_URL"])
 
@@ -9,7 +10,7 @@ const globalForPg = globalThis as unknown as { pool?: Pool }
 
 function createPool() {
   const pool = new Pool({
-    connectionString: postgres.databaseUrl,
+    connectionString: withVerifyFullSsl(postgres.databaseUrl),
     max: 10,
     connectionTimeoutMillis: 10_000,
   })
