@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowUpRight, CalendarDays, Check, ChevronRight, LockKeyhole, ShieldCheck, Trophy, X, Zap } from "lucide-react"
+import { ArrowUpRight, CalendarDays, Check, ChevronRight, CircleHelp, LockKeyhole, ShieldCheck, Trophy, X, Zap } from "lucide-react"
 import { createFixture, deleteMatchResult, skipMatchResult, submitMatchResult, unlockAdmin, updateFixtureLineup } from "@/app/actions"
 import { formatMatchDate } from "@/lib/match-dates"
 import { HOT_STREAK, joinNames, penaltySummary } from "@/lib/penalty"
@@ -79,12 +79,19 @@ function Header({ active, setActive }: { active: string; setActive: (value: stri
   )
 }
 
-function SectionHeader({ eyebrow, title, action, onAction }: { eyebrow: string; title: string; action?: string; onAction?: () => void }) {
+function SectionHeader({ eyebrow, title, action, onAction, onInfo }: { eyebrow: string; title: string; action?: string; onAction?: () => void; onInfo?: () => void }) {
   return (
     <div className="mb-5 flex items-end justify-between gap-4">
       <div>
         <p className="mb-1 text-[10px] font-black uppercase tracking-[0.22em] text-lime-300">{eyebrow}</p>
-        <h2 className="text-xl font-black tracking-tight text-white">{title}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-black tracking-tight text-white">{title}</h2>
+          {onInfo && (
+            <button type="button" aria-label="How points are given" onClick={onInfo} className="inline-flex size-10 items-center justify-center rounded-full border border-white/15 text-slate-300 hover:border-lime-300/40 hover:text-lime-300">
+              <CircleHelp className="size-5" />
+            </button>
+          )}
+        </div>
       </div>
       {action && (
         <button onClick={onAction} className="group flex cursor-pointer items-center gap-1 text-xs font-bold text-slate-400 hover:text-lime-300">
@@ -95,10 +102,10 @@ function SectionHeader({ eyebrow, title, action, onAction }: { eyebrow: string; 
   )
 }
 
-function Modal({ title, eyebrow, onClose, children }: { title: string; eyebrow: string; onClose: () => void; children: ReactNode }) {
+function Modal({ title, eyebrow, onClose, children, width = "max-w-3xl" }: { title: string; eyebrow: string; onClose: () => void; children: ReactNode; width?: string }) {
   return (
     <div role="dialog" aria-modal="true" className="fixed inset-0 z-30 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-      <div className="glass-card max-h-[90vh] w-full max-w-3xl overflow-auto rounded-[28px] p-6 sm:p-8">
+      <div className={`glass-card max-h-[90vh] w-full overflow-auto rounded-[28px] p-6 sm:p-8 ${width}`}>
         <div className="flex items-start justify-between">
           <div>
             <p className="mb-1 text-[10px] font-black uppercase tracking-[0.22em] text-lime-300">{eyebrow}</p>
@@ -255,10 +262,36 @@ function HomeView({ goRankings, players, matches, fixtures }: { goRankings: () =
   )
 }
 
+const POINT_ROWS = [
+  { score: "2-0", result: "Win", points: "3" },
+  { score: "2-1", result: "Win", points: "2" },
+  { score: "1-2", result: "Loss", points: "1" },
+  { score: "0-2", result: "Loss", points: "0" },
+]
+
 function RankingsView({ players, matches }: { players: PlayerStanding[]; matches: MatchRecord[] }) {
   const [history, setHistory] = useState(false)
+  const [pointsOpen, setPointsOpen] = useState(false)
   return (
     <div className="flex flex-col gap-8">
+      {pointsOpen && (
+        <Modal title="How points are given" eyebrow="Scoring" onClose={() => setPointsOpen(false)} width="max-w-md">
+          <p className="text-sm leading-6 text-slate-300">A match is best of three sets. Both league players on a team get the same points. Guests do not, and a skipped week does not count.</p>
+          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
+            <div className="grid grid-cols-3 border-b border-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+              <span>Score</span><span>Result</span><span className="text-right">Points</span>
+            </div>
+            {POINT_ROWS.map((row) => (
+              <div key={row.score} className="grid grid-cols-3 items-center border-b border-white/5 px-4 py-3 last:border-0">
+                <span className="text-sm font-black text-white">{row.score}</span>
+                <span className="text-sm font-bold text-slate-300">{row.result}</span>
+                <span className="text-right text-sm font-black text-lime-300">{row.points}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-sm leading-6 text-slate-400">The table ranks players by points. W/L is matches won and lost.</p>
+        </Modal>
+      )}
       {history && (
         <Modal title="Match History" eyebrow="Season 04 · Past results" onClose={() => setHistory(false)}>
           {matches.length === 0 ? (
@@ -284,7 +317,7 @@ function RankingsView({ players, matches }: { players: PlayerStanding[]; matches
         </Modal>
       )}
       <section>
-        <SectionHeader eyebrow="Season standings" title="Rankings & Stats" action="Match History" onAction={() => setHistory(true)} />
+        <SectionHeader eyebrow="Season standings" title="Rankings & Stats" action="Match History" onAction={() => setHistory(true)} onInfo={() => setPointsOpen(true)} />
         <div className="glass-card overflow-hidden rounded-3xl">
           <div className="grid grid-cols-[2fr_1fr_1fr] border-b border-white/10 px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
             <span>Player</span><span className="text-center">W/L</span><span className="text-right">Pts</span>
